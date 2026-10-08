@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODE — New Obuogi Development</title>
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151c2c;
+            --bg-accent: #1e293b;
+            --primary: #8b5cf6;
+            --primary-light: #c084fc;
+            --cyan: #06b6d4;
+            --green: #10b981;
+            --danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body { background: var(--bg-main); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 15px; }
+        header { background: linear-gradient(135deg, #1e1b4b, #311042); padding: 20px; border-radius: 14px; border: 1px solid rgba(139, 92, 246, 0.3); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .brand-title { font-size: 1.4em; font-weight: 800; background: linear-gradient(to right, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand-subtitle { font-size: 0.75em; color: var(--text-muted); margin-top: 4px; }
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold; text-transform: uppercase; }
+        .badge-admin { background: rgba(168, 85, 247, 0.2); color: var(--primary-light); border: 1px solid var(--primary); }
+        .badge-user { background: rgba(6, 182, 212, 0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+        .admin-section { background: linear-gradient(135deg, #2e1065, #1e1b4b); border: 2px solid var(--primary); padding: 20px; border-radius: 14px; margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 15px 0; }
+        .stat-card { background: rgba(15, 23, 42, 0.7); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .stat-val { font-size: 1.5em; font-weight: bold; color: var(--cyan); }
+        .stat-lbl { font-size: 0.7em; color: var(--text-muted); }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
+        .card-header { font-size: 1.1em; font-weight: 700; color: #f1f5f9; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
+        .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+        .member-card { background: var(--bg-accent); border-radius: 10px; padding: 12px; border-left: 4px solid var(--primary); }
+        .member-name { font-size: 1em; font-weight: bold; color: #fff; }
+        .member-pos { font-size: 0.8em; color: var(--cyan); font-weight: 600; margin-bottom: 4px; }
+        .member-desc { font-size: 0.75em; color: var(--text-muted); line-height: 1.3; }
+        .btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-danger { background: var(--danger); }
+        .btn-sm { padding: 4px 8px; font-size: 0.75em; }
+        input, select, textarea { width: 100%; padding: 10px; margin: 6px 0 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { background: var(--bg-accent); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .done { text-decoration: line-through; opacity: 0.5; }
+        .values-banner { background: linear-gradient(90deg, #0f172a, #1e293b); padding: 12px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #334155; }
+        .val-chip { background: rgba(139, 92, 246, 0.15); border: 1px solid var(--primary); padding: 3px 8px; border-radius: 12px; font-size: 0.75em; color: var(--primary-light); display: inline-block; margin: 2px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="brand-title">NODE — NEW OBUOGI DEVELOPMENT</div>
+            <div class="brand-subtitle">Rooted in Faith. Built on Family. Driven by Development. Created for Legacy.</div>
+        </div>
+        <div>
+            <span id="user-badge" class="badge"></span>
+            <button onclick="sessionStorage.clear();location.href='/login';" class="btn btn-danger btn-sm" style="margin-left:10px;">Logout</button>
+        </div>
+    </header>
+
+    <div class="values-banner">
+        <strong style="color:var(--cyan);">FAMILY VISION:</strong>
+        <span style="font-size:0.85em; color:#cbd5e1;">"To build a united, educated, economically empowered Obuogi family."</span>
+        <div style="margin-top:6px;">
+            <span class="val-chip">1. Unity</span>
+            <span class="val-chip">2. Education</span>
+            <span class="val-chip">3. Responsibility</span>
+            <span class="val-chip">4. Integrity</span>
+            <span class="val-chip">5. Faith & Values</span>
+            <span class="val-chip">6. Development</span>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="admin-section" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:#c084fc;">👑 Executive Admin Suite</h3>
+            <span style="font-size:0.75em; color:var(--text-muted);">Restricted Access</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div id="stat-users" class="stat-val">0</div><div class="stat-lbl">Members</div></div>
+            <div class="stat-card"><div id="stat-projects" class="stat-val">0</div><div class="stat-lbl">Projects</div></div>
+            <div class="stat-card"><div id="stat-meetings" class="stat-val">0</div><div class="stat-lbl">Meetings</div></div>
+            <div class="stat-card"><div id="stat-tasks" class="stat-val">0</div><div class="stat-lbl">Actions</div></div>
+            <div class="stat-card"><div id="stat-vault" class="stat-val">0</div><div class="stat-lbl">Vault Files</div></div>
+        </div>
+
+        <h4>👥 Family Member Roster Management</h4>
+        <ul id="admin-user-list"></ul>
+    </div>
+
+    <div class="card" style="margin-bottom:25px;">
+        <div class="card-header">
+            <span>🏛️ Family Leadership & Governance Structure</span>
+        </div>
+        <div id="roster-grid" class="roster-grid"></div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">📅 Family Meetings Tracker</div>
+            <form id="meeting-form">
+                <input type="text" id="m-title" placeholder="Meeting Title" required>
+                <input type="text" id="m-date" placeholder="Date & Time" required>
+                <textarea id="m-agenda" rows="2" placeholder="Agenda or Discussion Topics" required></textarea>
+                <button type="submit" class="btn" style="width:100%;">Schedule Meeting</button>
+            </form>
+            <ul id="meeting-list" style="margin-top:15px;"></ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">🚀 Projects & Economic Development</div>
+            <form id="project-form">
+                <input type="text" id="p-title" placeholder="Project Name" required>
+                <input type="text" id="p-leader" placeholder="Project Leader" required>
+                <input type="text" id="p-budget" placeholder="Budget / Target" required>
+                <button type="submit" class="btn" style="width:100%;">Initialize Project</button>
+            </form>
+            <ul id="project-list" style="margin-top:15px;"></ul>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">📋 Decision Pipeline & Responsibility Tracker</div>
+            <form id="task-form">
+                <input type="text" id="task-title" placeholder="Action Item / Task..." required>
+                <input type="text" id="task-assign" placeholder="Assigned Member" required>
+                <button type="submit" class="btn" style="width:100%;">Assign Responsibility</button>
+            </form>
+            <ul id="task-list" style="margin-top:15px;"></ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">📁 Family Heritage & Document Vault</div>
+            <form id="vault-form">
+                <input type="file" id="vault-file" required>
+                <button type="submit" class="btn" style="width:100%;">Upload Record / Minute</button>
+            </form>
+            <ul id="vault-list" style="margin-top:15px;"></ul>
+        </div>
+    </div>
+
+    <script>
+        const role = sessionStorage.getItem('node_role');
+        const username = sessionStorage.getItem('node_user');
+        const position = sessionStorage.getItem('node_pos');
+
+        if (!sessionStorage.getItem('node_token')) location.href = '/login';
+
+        const badge = document.getElementById('user-badge');
+        badge.innerText = `${username} • ${position}`;
+        badge.className = `badge ${role === 'admin' ? 'badge-admin' : 'badge-user'}`;
+
+        if (role === 'admin') {
+            document.getElementById('admin-panel').style.display = 'block';
+            loadAdminStats();
+        }
+
+        async function loadAdminStats() {
+            const res = await fetch('/api/v1/admin/stats');
+            const d = await res.json();
+            document.getElementById('stat-users').innerText = d.users;
+            document.getElementById('stat-tasks').innerText = d.tasks;
+            document.getElementById('stat-vault').innerText = d.vault;
+            document.getElementById('stat-meetings').innerText = d.meetings;
+            document.getElementById('stat-projects').innerText = d.projects;
+        }
+
+        async function loadRoster() {
+            const res = await fetch('/api/v1/users');
+            const users = await res.json();
+            
+            document.getElementById('roster-grid').innerHTML = users.map(u => `
+                <div class="member-card">
+                    <div class="member-name">${u.username}</div>
+                    <div class="member-pos">📌 ${u.position}</div>
+                    <div class="member-desc">${u.details}</div>
+                </div>
+            `).join('');
+
+            if (role === 'admin') {
+                document.getElementById('admin-user-list').innerHTML = users.map(u => `
+                    <li>
+                        <span><strong>${u.username}</strong> (${u.position})</span>
+                        <button onclick="resetPassword(${u.id})" class="btn btn-sm">Reset Password</button>
+                    </li>
+                `).join('');
+            }
+        }
+
+        async function resetPassword(id) {
+            const res = await fetch('/api/v1/users/reset', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}`
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                alert(`Password reset successfully! Default password is: ${data.default_pw}`);
+            }
+        }
+
+        async function loadTasks() {
+            const res = await fetch('/api/v1/tasks');
+            const tasks = await res.json();
+            document.getElementById('task-list').innerHTML = tasks.map(t => `
+                <li class="${t.status === 'completed' ? 'done' : ''}">
+                    <span><strong>${t.title}</strong> → <em>${t.assigned_to}</em></span>
+                    <div>
+                        <button onclick="toggleTask(${t.id}, '${t.status}')" class="btn btn-sm">${t.status === 'completed' ? 'Undo' : 'Done'}</button>
+                        ${role === 'admin' ? `<button onclick="deleteTask(${t.id})" class="btn btn-danger btn-sm">Delete</button>` : ''}
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        async function toggleTask(id, cur) {
+            await fetch('/api/v1/tasks/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}&status=${cur === 'completed' ? 'pending' : 'completed'}`
+            });
+            loadTasks();
+            if (role === 'admin') loadAdminStats();
+        }
+
+        async function deleteTask(id) {
+            await fetch('/api/v1/tasks/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}`
+            });
+            loadTasks();
+            if (role === 'admin') loadAdminStats();
+        }
+
+        document.getElementById('task-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch('/api/v1/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `title=${encodeURIComponent(document.getElementById('task-title').value)}&assigned_to=${encodeURIComponent(document.getElementById('task-assign').value)}`
+            });
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-assign').value = '';
+            loadTasks();
+            if (role === 'admin') loadAdminStats();
+        });
+
+        async function loadMeetings() {
+            const res = await fetch('/api/v1/meetings');
+            const meetings = await res.json();
+            document.getElementById('meeting-list').innerHTML = meetings.map(m => `
+                <li>
+                    <div>
+                        <strong>${m.title}</strong> (${m.meeting_date})
+                        <div style="font-size:0.75em; color:var(--text-muted);">${m.agenda}</div>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        document.getElementById('meeting-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch('/api/v1/meetings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `title=${encodeURIComponent(document.getElementById('m-title').value)}&meeting_date=${encodeURIComponent(document.getElementById('m-date').value)}&agenda=${encodeURIComponent(document.getElementById('m-agenda').value)}&minutes=`
+            });
+            document.getElementById('m-title').value = '';
+            document.getElementById('m-date').value = '';
+            document.getElementById('m-agenda').value = '';
+            loadMeetings();
+            if (role === 'admin') loadAdminStats();
+        });
+
+        async function loadProjects() {
+            const res = await fetch('/api/v1/projects');
+            const projects = await res.json();
+            document.getElementById('project-list').innerHTML = projects.map(p => `
+                <li>
+                    <div>
+                        <strong>${p.title}</strong> (Leader: ${p.leader})
+                        <div style="font-size:0.75em; color:var(--cyan);">Budget / Target: ${p.budget}</div>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        document.getElementById('project-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await fetch('/api/v1/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `title=${encodeURIComponent(document.getElementById('p-title').value)}&leader=${encodeURIComponent(document.getElementById('p-leader').value)}&budget=${encodeURIComponent(document.getElementById('p-budget').value)}&progress=0`
+            });
+            document.getElementById('p-title').value = '';
+            document.getElementById('p-leader').value = '';
+            document.getElementById('p-budget').value = '';
+            loadProjects();
+            if (role === 'admin') loadAdminStats();
+        });
+
+        async function loadVault() {
+            const res = await fetch('/api/v1/vault');
+            const files = await res.json();
+            document.getElementById('vault-list').innerHTML = files.map(f => `
+                <li>
+                    <span>📄 ${f.filename} (Uploaded by ${f.uploaded_by})</span>
+                    <div>
+                        <a href="${f.filepath}" download class="btn btn-sm" style="text-decoration:none;">Download</a>
+                        ${role === 'admin' ? `<button onclick="deleteVault(${f.id})" class="btn btn-danger btn-sm">Delete</button>` : ''}
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        async function deleteVault(id) {
+            await fetch('/api/v1/vault/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}`
+            });
+            loadVault();
+            if (role === 'admin') loadAdminStats();
+        }
+
+        document.getElementById('vault-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('vault-file');
+            if (!fileInput.files.length) return;
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = async () => {
+                await fetch('/api/v1/vault/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: file.name,
+                        filedata: reader.result.split(',')[1],
+                        uploaded_by: username
+                    })
+                });
+                fileInput.value = '';
+                loadVault();
+                if (role === 'admin') loadAdminStats();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        loadRoster();
+        loadTasks();
+        loadMeetings();
+        loadProjects();
+        loadVault();
+    </script>
+</body>
+</html>

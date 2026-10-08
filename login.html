@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODE — Family Login</title>
+    <style>
+        body { background: #0b0f19; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .login-card { background: #151c2c; padding: 30px; border-radius: 14px; border: 1px solid rgba(139, 92, 246, 0.3); width: 100%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .brand { font-size: 1.6em; font-weight: 800; background: linear-gradient(to right, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 5px; }
+        .sub { text-align: center; font-size: 0.8em; color: #94a3b8; margin-bottom: 25px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0 18px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; background: linear-gradient(to right, #0284c7, #8b5cf6); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .hint { font-size: 0.75em; color: #64748b; text-align: center; margin-top: 15px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand">NODE</div>
+        <div class="sub">New Obuogi Development System</div>
+
+        <form id="login-form">
+            <label style="font-size:0.85em;">Select Family Member</label>
+            <select id="user-select" required>
+                <option value="">-- Choose Account --</option>
+                <option value="Felix Ochieng">Felix Ochieng (Chairman - Admin)</option>
+                <option value="Gabriel Aloka">Gabriel Aloka (Digital Architect - Admin)</option>
+                <option value="Elisha Ouma">Elisha Ouma (Vice Chairman)</option>
+                <option value="Collins Odwar">Collins Odwar (Secretary)</option>
+                <option value="Judith Katiba">Judith Katiba (Family Member)</option>
+                <option value="Esther Joan">Esther Joan (Family Member)</option>
+                <option value="Joan Atieno">Joan Atieno (Family Member)</option>
+                <option value="Meshack Obuogi">Meshack Obuogi (Family Member)</option>
+                <option value="Obuogi Parents">Obuogi Parents (Family Advisory)</option>
+            </select>
+
+            <label style="font-size:0.85em;">Password</label>
+            <input type="password" id="password" placeholder="Default: @FirstName" required>
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="hint">
+            🔒 Private Obuogi Family System<br>
+            Default passwords: <strong>@FirstName</strong> (e.g. <code>@Felix</code>, <code>@Gabriel</code>)
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('user-select').addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val) {
+                const firstName = val.split(' ')[0];
+                document.getElementById('password').value = `@${firstName}`;
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('user-select').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch('/api/v1/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                sessionStorage.setItem('node_token', data.access_token);
+                sessionStorage.setItem('node_user', data.username);
+                sessionStorage.setItem('node_role', data.role);
+                sessionStorage.setItem('node_pos', data.position);
+                location.href = '/dashboard';
+            } else {
+                alert('Invalid credentials');
+            }
+        });
+    </script>
+</body>
+</html>

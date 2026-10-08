@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODE // System Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#050914] text-slate-100 font-sans min-h-screen flex items-center justify-center p-4">
+    <div class="bg-[#0b1222] border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-6 shadow-2xl">
+        <div class="text-center space-y-2">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center font-black text-white text-xl mx-auto shadow-lg shadow-cyan-500/20">N</div>
+            <h1 class="text-xl font-black text-white tracking-wide">NODE System</h1>
+            <p class="text-xs text-slate-400">Select profile to access Admin or Member Portal</p>
+        </div>
+        <form action="/login" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Family Member / Admin</label>
+                <select name="name" class="w-full bg-[#050914] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    % for u in users:
+                    <option value="{{ u['name'] }}">{{ u['name'] }} ({{ u['title'] }})</option>
+                    % end
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Password</label>
+                <input type="password" name="password" required placeholder="Enter profile password..." class="w-full bg-[#050914] border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 font-bold text-white text-xs py-3 rounded-xl transition shadow-lg shadow-blue-600/30">
+                Authenticate & Launch Portal
+            </button>
+        </form>
+    </div>
+</body>
+</html>
